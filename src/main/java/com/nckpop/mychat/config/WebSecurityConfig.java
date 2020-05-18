@@ -74,17 +74,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.OPTIONS
                 ).permitAll()
-                .antMatchers("/user/**", "/hello/*").permitAll()
+                .antMatchers("/hello/**", "/user/**", "/app/**", "/websocket/**").permitAll()
                 .anyRequest().authenticated();
 
-        http
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl().disable();
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
-//    }
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 }

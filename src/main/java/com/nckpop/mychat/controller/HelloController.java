@@ -13,4 +13,9 @@ public class HelloController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok().build();
+    }
+
 }

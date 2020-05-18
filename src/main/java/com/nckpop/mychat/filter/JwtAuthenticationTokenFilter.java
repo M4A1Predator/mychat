@@ -40,30 +40,31 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-        if ("/user/login".equals(path) || "/user/create".equals(path)) {
-            chain.doFilter(request, response);
-            return;
-        }
+//        String path = request.getRequestURI();
+//        if (path.startsWith("/websocket")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
 
         response.addHeader("Access-Control-Allow-Headers",
                 "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Authorization, refreshauthorization, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Credentials");
         if (response.getHeader("Access-Control-Allow-Origin") == null)
-            response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+            // response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+            response.addHeader("Access-Control-Allow-Origin", request.getHeader("origin") != null ? request.getHeader("origin"): "http://localhost:4200");
         if(response.getHeader("Access-Control-Allow-Credentials") == null)
             response.addHeader("Access-Control-Allow-Credentials", "true");
         if(response.getHeader("Access-Control-Allow-Methods") == null)
             response.addHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
 
-        String token;
-
-        if(!request.getMethod().equals("OPTIONS")){
-            token = request.getHeader(this.tokenHeader).substring(6);
-        }else{
-            token = request.getHeader(this.tokenHeader);
-        }
+        String token = request.getHeader(tokenHeader);
 
         if (token != null && !token.equals("")) {
+
+            if(!request.getMethod().equals("OPTIONS")){
+                token = request.getHeader(this.tokenHeader).substring(6);
+            }else{
+                token = request.getHeader(this.tokenHeader);
+            }
 
             if(jwtTokenUtil.isTokenExpired(token)){
                 response.setStatus(490);
