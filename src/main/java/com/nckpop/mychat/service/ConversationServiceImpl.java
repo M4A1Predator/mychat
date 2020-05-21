@@ -1,6 +1,7 @@
 package com.nckpop.mychat.service;
 
 import com.nckpop.mychat.entity.Conversation;
+import com.nckpop.mychat.model.MessageDto;
 import com.nckpop.mychat.repository.ConversationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,5 +19,9 @@ public class ConversationServiceImpl implements ConversationService {
         var con = new Conversation();
         con.setUsers(userIds);
         return conversationRepository.insert(con);
+    }
+
+    public void saveMessage(MessageDto messageDto) {
+
     }
 }

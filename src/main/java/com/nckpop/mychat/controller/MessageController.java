@@ -1,9 +1,12 @@
 package com.nckpop.mychat.controller;
 
 import com.nckpop.mychat.model.ChatRequest;
+import com.nckpop.mychat.model.MessageDto;
 import com.nckpop.mychat.model.OutputMessage;
+import com.nckpop.mychat.service.ConversationService;
 import com.nckpop.mychat.util.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -27,6 +30,9 @@ public class MessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private ConversationService conversationService;
+
     @PostMapping
     public ResponseEntity sendMeesage(@RequestBody @Valid ChatRequest request) {
         System.out.println(userRequest.getUserId());
@@ -35,9 +41,13 @@ public class MessageController {
 
     @MessageMapping("/send")
     @SendToUser("/topic/chat")
-    public OutputMessage send(@RequestBody @Valid ChatRequest request, Principal principal) {
+    public OutputMessage send(@RequestBody @Valid ChatRequest request, Principal principal, SimpMessageHeaderAccessor accessor) {
         var output = new OutputMessage("", request.getBody());
-        messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/chat", output);
+        var messageDto = new MessageDto();
+        messageDto.setConversationId(principal.getName());
+        messageDto.setBody(request.getBody());
+        conversationService.saveMessage(messageDto);
+        // messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/chat", output);
         return output;
     }
 
