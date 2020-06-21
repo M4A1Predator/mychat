@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
-@RequestMapping("/conversation")
+@RequestMapping("/conversations")
 @RestController
 @CrossOrigin
 public class ConversationController {
@@ -30,9 +30,10 @@ public class ConversationController {
     @GetMapping
     public ResponseEntity getList(@RequestHeader(value = JwtConstant.JWT_HEADER) String tokenHeader) {
         String userId = jwtTokenUtil.getUserIdFromToken(tokenHeader.substring(6));
-        // User user = userService.read(userId);
         var user = userService.getUser(userId);
-        return ResponseEntity.ok(user);
+
+        var cons = conversationService.getConversationsByUser(userId);
+        return ResponseEntity.ok(cons);
     }
 
     @PostMapping

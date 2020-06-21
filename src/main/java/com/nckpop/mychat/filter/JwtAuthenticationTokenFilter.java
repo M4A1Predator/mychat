@@ -40,12 +40,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-//        String path = request.getRequestURI();
-//        if (path.startsWith("/websocket")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-
         response.addHeader("Access-Control-Allow-Headers",
                 "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Authorization, refreshauthorization, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Credentials");
         if (response.getHeader("Access-Control-Allow-Origin") == null)

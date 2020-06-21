@@ -17,9 +17,9 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
                                       WebSocketHandler wsHandler,
                                       Map<String, Object> attributes) {
         // generate user name by UUID
-        String q = ((HttpRequest)request).getURI().getQuery();
-        var m = UriComponentsBuilder.fromUri(((HttpRequest)request).getURI()).build().getQueryParams();
-        // return new StompPrincipal(UUID.randomUUID().toString());
-        return new StompPrincipal(m.get("conId").toString());
+        //String q = ((HttpRequest)request).getURI().getQuery();
+        //var m = UriComponentsBuilder.fromUri(((HttpRequest)request).getURI()).build().getQueryParams();
+        return new StompPrincipal(UUID.randomUUID().toString());
+        //return new StompPrincipal(m.get("conId").toString());
     }
 }

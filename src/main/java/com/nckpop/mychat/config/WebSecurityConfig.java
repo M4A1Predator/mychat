@@ -75,6 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpMethod.OPTIONS
                 ).permitAll()
                 .antMatchers("/hello/**", "/user/**", "/app/**", "/websocket/**").permitAll()
+                // .antMatchers("/chat/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

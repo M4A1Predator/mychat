@@ -57,9 +57,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     StompPrincipal authentication = null;
                     if(jwtUtil.validateToken(accessToken)) {
                         String username = jwtUtil.getUsernameFromToken(accessToken);
-                        authentication = new StompPrincipal(username);
+                        String userId = jwtUtil.getUserIdFromToken(accessToken);
+                        authentication = new StompPrincipal(userId);
+                        authentication.setUserId(userId);
                     }
-
                     accessor.setUser(authentication);
                 }
                 return message;
