@@ -50,7 +50,8 @@ public class MessageController {
             messageDto.setConversationId(request.getConversationId());
             messageDto.setBody(request.getBody());
             messageDto.setFrom(((StompPrincipal)principal).getUserId());
-            conversationService.saveMessage(messageDto);
+            var savedMessage = conversationService.saveMessage(messageDto);
+            messageDto.setId(savedMessage.get_id().toString());
             // messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/chat", output);
             // var accessorUser = accessor.getUser();
 

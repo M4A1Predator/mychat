@@ -8,5 +8,7 @@ public class MessageDto {
     private String conversationId;
     private String body;
     private String from;
+    private String fromName;
+    private String id;
 
 }

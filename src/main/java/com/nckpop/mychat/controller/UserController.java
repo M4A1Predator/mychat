@@ -1,14 +1,17 @@
 package com.nckpop.mychat.controller;
 
+import com.nckpop.mychat.constant.JwtConstant;
 import com.nckpop.mychat.model.JwtRequest;
 import com.nckpop.mychat.model.JwtResponse;
 import com.nckpop.mychat.model.UserDto;
+import com.nckpop.mychat.model.VerifyTokenDto;
 import com.nckpop.mychat.service.JwtUtil;
 import com.nckpop.mychat.service.MyUserService;
 import com.nckpop.mychat.util.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,6 +75,27 @@ public class UserController {
         userDto.setUserId(user.get_id().toString());
         userDto.setUsername(user.getUsername());
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity verifyToken(@Header(JwtConstant.JWT_HEADER) String accessToken) {
+        if (accessToken == null || accessToken.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        boolean isValidate = jwtTokenUtil.validateToken(accessToken);
+        if (!isValidate) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        boolean isExpired = jwtTokenUtil.isTokenExpired(accessToken);
+        if (isExpired) {
+            VerifyTokenDto verifyTokenDto = new VerifyTokenDto();
+            verifyTokenDto.setMessage("expired");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(verifyTokenDto);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -81,7 +81,7 @@ public class JwtUtilWithoutDbCheckImpl implements JwtUtil, Serializable {
         } catch (Exception e) {
             roles = null;
         }
-        return roles != null ? roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()) : null;
+        return roles != null ? roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()) : null;
     }
 
     @Override

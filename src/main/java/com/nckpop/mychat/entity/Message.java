@@ -5,6 +5,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.Date;
+
 @Data
 public class Message {
 
@@ -14,6 +16,8 @@ public class Message {
     @DBRef
     private CustomUser owner;
 
-    private String conversationId;
+    private ObjectId conversationId;
+
+    private Date createdAt;
 
 }

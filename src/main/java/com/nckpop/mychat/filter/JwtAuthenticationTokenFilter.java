@@ -69,15 +69,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
                 String username = jwtTokenUtil.getUsernameFromToken(token);
                 List autorities = jwtTokenUtil.getRolesFromToken(token);
-                logger.info("checking Validity of JWT for user ");
+                logger.debug("checking Validity of JWT for user ");
 
-                logger.info("checking authentication for user " + username);
+                logger.debug("checking authentication for user " + username);
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, autorities);
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    logger.info("authenticated user " + username + ", setting security context");
+                    logger.debug("authenticated user " + username + ", setting security context");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 

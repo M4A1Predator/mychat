@@ -3,9 +3,9 @@ package com.nckpop.mychat.entity;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 public class Conversation {
@@ -14,8 +14,9 @@ public class Conversation {
     private ObjectId _id;
 
     // private Collection<String> users;
-
-    @DBRef
     private Collection<ObjectId> users;
+    private ObjectId owner;
+    private Date createdAt;
+    private Date lastActionAt;
 
 }

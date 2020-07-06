@@ -7,6 +7,7 @@ public class OutputMessage {
 
     private String from;
     private String body;
+    private String fromName;
 
     public OutputMessage(String from, String body) {
         this.from = from;
