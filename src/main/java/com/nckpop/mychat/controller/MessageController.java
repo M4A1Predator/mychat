@@ -58,7 +58,8 @@ public class MessageController {
             // send message
             List<String> userIds = conversationService.getConversationUserIds(request.getConversationId());
             for(String s: userIds) {
-                messagingTemplate.convertAndSendToUser(s, "/topic/chat", output);
+                String destName = s + ":" + request.getConversationId();
+                messagingTemplate.convertAndSendToUser(destName, "/topic/chat", output);
             }
 
             return output;

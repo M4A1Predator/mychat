@@ -19,6 +19,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -50,15 +51,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor =
                         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                // classify incoming message
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> authorization = accessor.getNativeHeader("Authorization");
+                    String conId = Objects.requireNonNull(accessor.getNativeHeader("conversationId")).stream().findFirst().orElse(null);
                     String accessToken = authorization.get(0).split(" ")[1];
 
                     StompPrincipal authentication = null;
                     if(jwtUtil.validateToken(accessToken)) {
                         String username = jwtUtil.getUsernameFromToken(accessToken);
                         String userId = jwtUtil.getUserIdFromToken(accessToken);
-                        authentication = new StompPrincipal(userId);
+                        authentication = new StompPrincipal(userId + ":" + conId);
                         authentication.setUserId(userId);
                     }
                     accessor.setUser(authentication);
